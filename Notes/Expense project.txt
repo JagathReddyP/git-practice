@@ -1,0 +1,1257 @@
+
+Desktop applications
+---------------------
+
+Disadvantages:
+
+we have to install
+we have to maintain storage --> only in single system beacuse files cant be transfered to whatever system you work.
+we have to upgrade
+we need to fix the problems
+what if a system crash. It will be a data loss
+system resources consumes heavily
+
+
+web based applications (Full flexible)
+---------------------------------------
+
+no installation
+no upgrade 
+no compatability issues
+no storage issues
+you can open everywhere
+
+
+Web based applications follows 3 tier architecture to get better results
+
+ex: lets see three scenarios
+
+Road side kart:(dosa bandi)
+---------------
+Only one person, he has to take care of cooking, billing, serving, odering, cleaning etc. Even dealing with 10 persons also difficult for him.
+so constantly daily more than 10 people coming means he will upgrade to small hotel.
+
+
+Small hotel:
+-----------
+there will be a cook and a separate person in billing counter. Owner issues tokens, chef will prepare food and serve 15 persons can be dealt easily.
+
+But here cashier can give more tokens(orders) but more than 50 means it will difficult for chef because he need to take the orders and prepare and serve . So he will upgrade to restuarant
+
+
+upgrade to restuarant:
+----------------------
+When you enters it. A someone./captain will welcome you and he will show your table. Now waiter will come and takess the order and gives to chef.
+
+Chef sees the order and cook raw products to eatble format. Again waiter will bring the food to your table
+
+Now in this example everyone has there own responsibilities. 
+
+waiter --> web server
+chef --> appserver
+raw products/ items--> DB server or data
+
+for more listen session 6 at timestramp:25 mins
+
+webserver act as queue handler--> it will take orders efficiently and tranfers to app server
+
+So customer request first goes to load balancer and then web server to app servers
+
+customer --> load balancer --> web server --> app server --> Db server 
+
+3 tier architecture
+----------------------
+web tier --> LB, Web servers
+App/API tier --> App servers
+Data tier --> DB serverss
+
+
+frontend applications mostly static --> will be hosted on nginx, apache etc
+
+Backend apps will be dynamic --> JBOSS, Webshere, weblogic etc
+
+
+first data base vunte appserevr aina web server aina data ni process chestai 
+
+----------------------------------------------------------------------------------------------
+
+Rhel server creation on aws
+---------------------------
+
+Devops course has there own ami.
+
+-->After clicking on launch instance. You will give server name and then under  "Application and OS Images (Amazon Machine Image)"
+
+-->devops-practice and click browse more AMIs search ( you can also search with this ID - ami-0220d79f3f480ecf5)
+
+-->Now click on Community AMIs
+
+-->Select  Redhat-9-DevOps-Practice
+
+-->Select t3.micro > no need for key pair since we don’t use it. Proceed without keypair
+
+-->Create a new security rule. And allow all ports. It is security issue but initially we are using that rule. Later sessions will increase security
+
+   Inbound rules > All traffic > anywhere ipv4 > create security group
+
+-->Network setting > open all ports > and then launch instance.
+
+
+
+for RHEL
+
+Username>  ec2-user@ip address 
+Pwd - DevOps321
+
+$ ssh ec2-user@54.89.168.132
+
+Pwd : DevOps321
+
+
+Database server
+---------------
+
+Install DB --> MySQL
+
+dnf install 
+
+dnf install mysql-server -y
+
+run DB --> using systemctl commands
+
+systemctl start mysqld
+
+link for mysql steps --> https://github.com/daws-81s/expenses-documention/blob/main/mysql.MD
+
+sudo su -
+
+installed mysql > started mysql
+
+Now how to check port > netstat -lntp or -ltpn
+----------------------------------------------
+
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1257/sshd: /usr/sbi
+tcp6       0      0 :::22                   :::*                    LISTEN      1257/sshd: /usr/sbi
+tcp6       0      0 :::3306                 :::*                    LISTEN      2002/mysqld
+tcp6       0      0 :::33060                :::*                    LISTEN      2002/mysqld
+---------------------------------------------------------------------------------------
+it was running on port 3306
+
+The “real” MySQL port
+
+3306 → this is the default MySQL server port
+
+It’s used for:
+
+Client connections (mysql, apps, ORMs)
+
+Replication
+
+Remote access
+
+If MySQL is running normally, this is the only port it truly requires.
+
+So why do people see a second port?
+1. MySQL X Protocol (very common)
+
+Newer MySQL versions (8.0+) often enable this by default.
+
+33060 → MySQL X Plugin
+
+Used for:
+
+MySQL Shell
+
+Document Store (NoSQL-style access)
+
+DevAPI (Java, Python, Node)
+--------------------------------------------------------------------------------------------
+
+grep to check PID 
+------------------
+[ root@ip-172-31-16-163 ~ ]# ps -ef|grep mysql
+mysql       2002       1  0 17:44 ?        00:00:02 /usr/libexec/mysqld --basedir=/usr
+root        2068    1426  0 17:49 pts/0    00:00:00 grep --color=auto mysql
+
+For enable mysql 
+-----------------
+systemctl enable mysqld
+
+For our installed mysql server > by default user will be root (since you installed on root) > password must be set by you
+
+To set password for mysql
+-------------------------
+
+mysql_secure_installation --set-root-pass ExpenseApp@1  
+
+(so pwd is ExpenseApp@1)
+
+server software is mysql server and it was installed and running, to check data you should connect to server through client
+
+so ikkada manam em chestunnam ante (mysql-server) ni istall chesam but to check data we also need client server too. So ippudu adi kuda installing so dhanni just (mysql) antam
+
+
+client package is just mysql
+----------------------------
+
+dnf install mysql -y
+
+So indhaka manam istall chesina mysql server tho patu client kuda automatic ga installed anta. 
+
+[ root@ip-172-31-16-163 ~ ]# dnf install mysql -y
+Last metadata expiration check: 0:20:47 ago on Sat Feb  7 17:43:29 2026.
+Package mysql-8.0.44-1.el9_7.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+
+
+To connect to the server
+
+mysql -h <Ip address> -u root -p<password>  
+
+(mysql protocol by deafault 3306 eh server ni connect avutunnam -h host(IP), eh user ni -u means username, after -p without enter pwd) 
+
+
+But if your client and server both are in a single server, you can simply issue. mysql
+--------------------------------------------------------------------------------
+[ root@ip-172-31-16-163 ~ ]# mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.44 Source distribution
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>
+
+
+Use exit to exit from sql client
+
+
+In database data was segregated as partitions for easy maintenance. usually called as schemas/database
+
+ex: In facebaook
+
+user --> user schema (user data will be on user schema)
+posts --> posts schema
+vedios --> vedios schema
+
+
+mysql
+
+Once you got mysql prompt, you can use below command to check schemas/databases exist.
+
+show databases;  (; is imp after the command)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.06 sec)
+
+
+use information_schema;
+
+mysql> use information_schema;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+---------------------------------------
+
+So we are now inside information_schema
+
+To see number of tables use > show tables;
+
+------------------------------------------------------
+You can get entries of a table using
+
+select * from <table_name>;
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> use mysql
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
+
+mysql> select * from user;
++-----------+------------------+-------------+-------------+-------------+-------------+-------------+-----------+-------------+---------------+--------------+-----------+------------+-----------------+------------+------------+--------------+------------+-----------------------+------------------+--------------+-----------------+------------------+------------------+----------------+---------------------+--------------------+------------------+------------+--------------+------------------------+----------+------------------------+--------------------------+----------------------------+---------------+-------------+-----------------+----------------------+-----------------------+------------------------------------------------------------------------+------------------+-----------------------+-------------------+----------------+------------------+----------------+------------------------+---------------------+--------------------------+-----------------+
+| Host      | User             | Select_priv | Insert_priv | Update_priv | Delete_priv | Create_priv | Drop_priv | Reload_priv | Shutdown_priv | Process_priv | File_priv | Grant_priv | References_priv | Index_priv | Alter_priv | Show_db_priv | Super_priv | Create_tmp_table_priv | Lock_tables_priv | Execute_priv | Repl_slave_priv | Repl_client_priv | Create_view_priv | Show_view_priv | Create_routine_priv | Alter_routine_priv | Create_user_priv | Event_priv | Trigger_priv | Create_tablespace_priv | ssl_type | ssl_cipher             | x509_issuer              | x509_subject               | max_questions | max_updates | max_connections | max_user_connections | plugin                | authentication_string                                                  | password_expired | password_last_changed | password_lifetime | account_locked | Create_role_priv | Drop_role_priv | Password_reuse_history | Password_reuse_time | Password_require_current | User_attributes |
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                                      Expense project seesion 7:
+
+Create 2 severs 
+
+1)Db server
+2)backend-server
+
+Connect to db server
+
+sudo su -
+
+dnf install mysql-server -y
+
+systemctl enable mysqld   (here d for demon)
+
+systemctl start mysqld
+
+set root password : 
+---------------------
+
+mysql_secure_installation --set-root-pass ExpenseApp@1
+
+check port is open or not : netstat -ltpn
+
+# ps -ef|grep mysql
+mysql      14425       1  0 10:52 ?        00:00:03 /usr/libexec/mysqld --basedir=/usr
+root       14585    1599  0 11:06 pts/0    00:00:00 grep --color=auto mysql
+
+use putty from now on to connect to servers
+-------------------------------------------------------------------------------------------------------------------------------------------
+                                                         login to backend server
+
+Backend --> Java, DotNet, Python, NodeJs, go, ruby, php, etc.
+
+NodeJS
+----------
+dependencies --> nginx, git, etc.
+
+libraries
+-----------
+what is library? --> Whenever you want you can consume, no need to buy. It is common for everyone. Many people can use it
+
+source files --> *.js  (dats.js) (source is nothing but code)
+
+NodeJs
+--------
+build file == package.json --> where you mention your project metadata. Name, description, version, dependencies and their versions.
+
+build tool = npm --> it will search package.json in your folder and it will get the dependencies/libraries from internet
+
+Java
+--------
+build file == pom.xml --> Name, project description, dependencies and their versions
+
+build tool = maven --> it will search pom.xml in your folder and it will get the dependencies/libraries from internet
+
+source files --> *.java
+
+Python
+---------
+build file == requirements.txt --> Name, project description, dependencies and their versions
+
+build tool = pip --> it will search requirements.txt in your folder and it will get the dependencies/libraries from internet
+
+source files --> *.py
+
+----------------------------------------------------------------------------------------
+
+So ikkada version anedhi company batti vuntadi. So first to check available versions we follow below steps.
+
+install nodejs on backend server > sudo su - > dnf module list nodejs
+
+[ root@ip-172-31-94-252 ~ ]# dnf module list nodejs
+Last metadata expiration check: 0:22:40 ago on Mon Feb  9 14:50:25 2026.
+Red Hat Enterprise Linux 9 for x86_64 - AppStream from RHUI (RPMs)
+Name                    Stream                 Profiles                                              Summary
+nodejs                  18                     common [d], development, minimal, s2i                 Javascript runtime
+nodejs                  20                     common [d], development, minimal, s2i                 Javascript runtime
+nodejs                  22                     common [d], development, minimal, s2i                 Javascript runtime
+nodejs                  24                     common [d], development, minimal, s2i                 Javascript runtime
+
+Here we want nodejs 20 version > 
+
+dnf module disable nodejs:18 -y
+
+dnf module enable nodejs:20 -y
+
+Now if you install it will automatically download nodejs version 20
+
+dnf install nodejs -y
+
+Installed:
+  nodejs-1:20.19.5-1.module+el9.7.0+23586+8784698a.x86_64              nodejs-docs-1:20.19.5-1.module+el9.7.0+23586+8784698a.noarch
+  nodejs-full-i18n-1:20.19.5-1.module+el9.7.0+23586+8784698a.x86_64    npm-1:10.8.2-1.20.19.5.1.module+el9.7.0+23586+8784698a.x86_64
+
+Complete!
+
+
+configure the application user.
+
+suresh, ramesh  --> humans
+
+system users --> expense 
+
+Add application User
+---------------------
+
+useradd expense
+
+User expense is a function / daemon user to run the application. Apart from that we don't use this user to login to server.
+
+Also, username expense has been picked because it more suits to our project name.
+
+App Directory
+--------------
+We keep application in one standard location. This is a usual practice that runs in the organization.
+
+Lets setup an app directory.
+
+mkdir /app   (used this folder to place the application)
+
+downloading expense app
+----------------------
+
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip  
+
+(-o means output so you can use curl as wget command with this -o feature)
+
+cd /app
+
+unzip /tmp/backend.zip        (unzipping app files on this path)
+
+you can list files with ls -ltr
+
+[ root@ip-172-31-94-252 /app ]# ls -ltr
+total 16
+-rw-r--r-- 1 root root 3553 Feb 25  2024 index.js
+-rw-r--r-- 1 root root  142 Feb 25  2024 DbConfig.js
+-rw-r--r-- 1 root root  411 Feb 25  2024 package.json
+-rw-r--r-- 1 root root 1882 Feb 25  2024 TransactionService.js
+drwxr-xr-x 2 root root   25 Feb 26  2024 schema
+
+
+Every application is developed by development team will have some common softwares that they use as libraries. This application also have the same way of defined dependencies in the application configuration.
+
+Lets download the dependencies.
+-------------------------------
+
+cd /app
+
+npm install
+
+[ root@ip-172-31-94-252 /app ]# npm install 
+
+1)npm first checks for:
+
+package.json
+
+This file lists:
+
+dependencies → required at runtime
+
+devDependencies → needed for development
+
+2)If package-lock.json exists:
+
+npm installs exact exact versions
+
+ensures reproducible builds
+
+avoids “works on my machine” problems
+
+3)npm then:
+
+fetches packages from the npm registry (or configured registry)
+
+resolves dependency trees
+
+installs everything into:
+
+node_modules/
+
+added 86 packages, and audited 87 packages in 7s
+
+18 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+You can see a new directory node_modules post installing packages or dependencies
+
+drwxr-xr-x 87 root root  4096 Feb  9 16:38 node_modules
+
+-----------------------------------------------------
+4. Runs lifecycle scripts (important!)
+
+If defined, npm will automatically run:
+
+preinstall
+
+install
+
+postinstall
+
+These can:
+
+compile native addons
+
+download binaries
+
+sometimes break builds 😬
+
+You can skip scripts with:
+
+npm install --ignore-scripts
+
+-------------------------------------------------------------------------------------
+
+
+nodejs
+-----
+build file --> package.json
+build tool --> npm --> node package manager
+files --> *.js
+npm install
+node_modules
+
+manual start :
+
+/bin/node /app/index.js
+
+
+We need to setup a new service in systemd so systemctl can manage this start/stop/restart/enable/disable service
+
+Setup SystemD Expense Backend Service
+
+vim /etc/systemd/system/backend.service 
+
+syntax for systemctl
+--------------------- 
+[Unit]
+Description=ATD daemon
+[Service]
+Type=forking
+ExecStart=/usr/bin/atd
+[Install]
+WantedBy=multi-user.target
+
+/etc/systemd/system --> Here you can place all your service files ( normally whenever a linux server starts it will go to the /etc/systemd/system  and looks for any .service files were enabled on that path.)
+
+extension must be --> .service
+----------------------------------------------------
+vim /etc/systemd/system/backend.service 
+
+[Unit]
+Description = Backend Service
+
+[Service]
+User=expense
+Environment=DB_HOST="mysql.jagathlearn.art"
+ExecStart=/bin/node /app/index.js
+SyslogIdentifier=backend
+
+[Install]
+WantedBy=multi-user.target
+
+
+Note : Environment=DB_HOST="172.31.84.184" (manam iche ip private ip istam db server dhi. So within project aithe private istham external aithe public. public IP may change when restart the server, but private IP will never change when stop/start)
+-----------------------------------------------
+
+Load the service.
+-----------------
+
+systemctl daemon-reload
+
+Start the service.
+--------------------
+systemctl start backend
+
+systemctl enable backend
+
+[ root@ip-172-31-94-104 /etc/systemd/system ]# systemctl status backend
+× backend.service - Backend Service
+     Loaded: loaded (/etc/systemd/system/backend.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Tue 2026-02-10 10:30:50 UTC; 21min ago
+   Duration: 514ms
+   Main PID: 16568 (code=exited, status=1/FAILURE)
+        CPU: 259ms
+
+It was showing failed check the port aswell. So port is not opened
+
+ netstat -ltpn
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1256/sshd: /usr/sbi
+tcp6       0      0 :::22                   :::*                    LISTEN      1256/sshd: /usr/sbi
+
+ps -ef|grep nodejs
+
+Check the logs for errors. path /var/log/messages --> Linux logs everything here
+
+less /var/log/messages
+
+Feb 10 10:30:50 ip-172-31-94-104 backend[16568]: Error: Host 'ip-172-31-94-104.ec2.internal' is not allowed to connect to this MySQL se
+rver
+Feb 10 10:30:50 ip-172-31-94-104 backend[16568]:    at Packet.asError (/app/node_modules/mysql2/lib/packets/packet.js:739:17)
+Feb 10 10:30:50 ip-172-31-94-104 backend[16568]:    at ClientHandshake.execute (/app/node_modules/mysql2/lib/commands/command.js:29:26)
+
+schema was like wardrobe to store something.
+
+so 
+
+create a schema/database for expense project
+
+create a table ( it is one time activity)
+
+CREATE DATABASE IF NOT EXISTS transactions;
+USE transactions;
+
+CREATE TABLE IF NOT EXISTS transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    amount INT,
+    description VARCHAR(255)
+);
+
+CREATE USER IF NOT EXISTS 'expense'@'%' IDENTIFIED BY 'ExpenseApp@1';
+GRANT ALL ON transactions.* TO 'expense'@'%';
+FLUSH PRIVILEGES;
+
+Note : we installed client sql on backend server only. so while executing below command use db server private ip address
+       Also make sure on db server mysql_secure_installation --set-root-pass ExpenseApp@1. else you will get error while using below command
+
+Install mysql client server
+---------------------------
+
+dnf install mysql -y
+
+Load Schema
+-------------
+
+mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pExpenseApp@1 < /app/schema/backend.sql   (ikkada kuda private ip eh istam db server dhi)(in case dns vunte adi ivvali)
+
+
+mysql -h 172.31.22.219 -uroot -pExpenseApp@1 < /app/schema/backend.sql
+
+mysql -h mysql.jagathlearn.art -uroot -pExpenseApp@1 < /app/schema/backend.sql
+
+
+You can check newly added schema on db server
+-----------------------------------------------
+
+commands :
+
+mysql
+
+show databases;
+
+use transactions;
+
+show tables;
+
+mysql> show tables;
++------------------------+
+| Tables_in_transactions |
++------------------------+
+| transactions           |
++------------------------+
+1 row in set (0.00 sec)
+
+
+Note: You can also directly connect from backend server using below command
+
+mysql -h 172.31.84.184 -uroot -pExpenseApp@1
+
+mysql
+
+show databases;
+
+use transactions;
+
+show tables;
+
+
+mysql> show tables;
++------------------------+
+| Tables_in_transactions |
++------------------------+
+| transactions           |
++------------------------+
+1 row in set (0.00 sec)
+
+-------------------------------------------------------------------------------------------
+
+Now schema created you can restart backend app and see its status
+-------------------------------------------------------------------
+
+systemctl restart backend
+
+[ root@ip-172-31-94-104 /app ]# systemctl restart backend
+
+systemctl status backend
+
+44.202.26.43 | 172.31.94.104 | t3.micro | null
+[ root@ip-172-31-94-104 /app ]# systemctl status backend
+● backend.service - Backend Service
+     Loaded: loaded (/etc/systemd/system/backend.service; enabled; preset: disabled)
+     Active: active (running) since Tue 2026-02-10 15:48:27 UTC; 9s ago
+
+[ root@ip-172-31-94-104 /app ]# netstat -lntp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1256/sshd: /usr/sbi
+tcp6       0      0 :::8080                 :::*                    LISTEN      18586/node
+tcp6       0      0 :::22                   :::*                    LISTEN      1256/sshd: /usr/sbi
+
+44.202.26.43 | 172.31.94.104 | t3.micro | null
+
+
+[ root@ip-172-31-94-104 /app ]# ps -ef|grep node
+expense    18586       1  0 15:48 ?        00:00:00 /bin/node /app/index.js
+root       18610   18177  0 15:50 pts/0    00:00:00 grep --color=auto node
+
+netstat -ltpn
+
+backend applications mostly opens --> 8080
+
+to check db is alive or not we use below commands 
+
+ping <IP>  (private ip address ivvali)
+
+ping 172.31.84.184
+
+telnet <IP> 3306
+
+telnet 172.31.84.184 3306
+
+--------------------------------------------------------------------------------------------
+                                          Frontend
+										  
+The frontend is the service in Expense to serve the web content over Nginx. This will have the web frame for the web application.
+
+This is a static content and to serve static content we need a web server. This server
+
+Developer has chosen Nginx as a web server and thus we will install Nginx Web Server
+
+
+Now create front end, frontend apps are static apps like html and css
+
+
+Create one frontend server instance on aws after that
+
+/etc/nginx --> nginx config is here
+/usr/share/nginx/html --> here you need to place your websites
+/var/log/nginx --> here nginx places the logs
+
+* dnf tho install chesina vatiki systemctl commands automatic ga vochesthai, I mean work avuthai*
+
+Install Nginx
+--------------
+
+dnf install nginx -y 
+
+Enable nginx
+---------------
+
+systemctl enable nginx
+
+Start nginx
+------------
+
+systemctl start nginx
+
+Try to access the service once over the browser and ensure you get some default content
+---------------------------------------------------------------------------------------
+Generally deafault frontend content /usr/share/nginx/html/index.html lo vunatadi --> It load automatically when you hit IP address
+
+Ikkada manam project eh chestunnam kanuka we dont need default webpage content so
+
+Remove the default content that web server is serving.
+
+rm -rf /usr/share/nginx/html/*
+
+Download the frontend content
+-----------------------------
+
+curl -o /tmp/frontend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+
+
+Extract the frontend content.
+----------------------------
+cd /usr/share/nginx/html
+
+unzip /tmp/frontend.zip
+
+Try to access the nginx service once more over the browser and ensure you get expense content.
+
+/usr/share/nginx/html/index.html --> load automatically when you hit IP address
+
+
+Create Nginx Reverse Proxy Configuration.
+----------------------------------------
+
+vim /etc/nginx/default.d/expense.conf
+
+Add the following content
+
+# Kinda local host place lo backend server private ip place cheyyali 
+
+proxy_http_version 1.1;
+
+location /api/ { proxy_pass http://localhost:8080/; }                           
+
+location /health {
+  stub_status on;
+  access_log off;
+}
+
+example:
+
+proxy_http_version 1.1;
+
+location /api/ { proxy_pass http://172.31.31.124:8080/; }                           
+
+location /health {
+  stub_status on;
+  access_log off;
+}
+
+Example 2 : If you have dns you can give that instead of local host Ip
+
+vim /etc/nginx/default.d/expense.conf
+
+
+proxy_http_version 1.1;
+
+location /api/ { proxy_pass http://backend.jagathlearn.art:8080/; }                           
+
+location /health {
+  stub_status on;
+  access_log off;
+}
+
+Ensure you replace the localhost with the actual ip address of backend component server (ex : { proxy_pass http://172.31.94.104:8080/; }). Word localhost is just used to avoid the failures on the Nginx Server.
+
+------------------------------------------------------------------------------
+
+Restart Nginx Service to load the changes of the configuration.
+-----------------------
+
+systemctl restart nginx
+
+Now try to add few data on frontend nginx. Check it from either db server or backend.
+
+here I am showing for backend
+
+mysql -h 172.31.84.184 -uroot -pExpenseApp@1  or below one
+
+mysql -h mysql.jagathlearn.art -uroot -pExpenseApp@1
+
+
+mysql
+
+show databases;
+
+use transactions;
+
+show tables;
+
+mysql> select * from transactions;
++----+--------+--------------+
+| id | amount | description  |
++----+--------+--------------+
+|  1 |    100 | travel       |
+|  2 |   3000 | pocket money |
++----+--------+--------------+
+2 rows in set (0.00 sec)
+
+Note: if you give wrong inputs backend app will be stopped ex: in number place characters> restart it before trying again > systemctl start backend
+
+Here the developer needs to develop it properly. So the above issue we cant do anything.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                                                   Session 8
+																  ----------- 
+Redhat-9-DevOps-Practice ami
+
+
+So first as usual anni create chesam like db server, backend , frontend servers. (for steps refer session 7 notes)
+
+
+Forward proxy vs Reverse Proxy
+
+DNS --> Domain name system
+
+ex; Instead of ip we give dns name. because Ip may change and we dont need to change ip on below script everytime.
+
+[Unit]
+Description = Backend Service
+
+[Service]
+User=expense
+Environment=DB_HOST="mysql.daws78s.online"
+ExecStart=/bin/node /app/index.js
+SyslogIdentifier=backend
+
+[Install]
+WantedBy=multi-user.target
+
+without touching the servers, tasks should automatically update
+
+DNS --> Domain name system
+----------
+mysql.devops.com --> return IP address
+
+common domain registars --> godaddy, hostinger, AWS, Azure, GCP, etc.
+
+hostinger --> cheapest way to buy domains
+
+domain name is unique in the universe...
+
+ex : google.com/facebook.com 
+
+computers understand only numbers
+
+humans understand only names
+
+facebook.com --> 18.90.23.217
+consider yours is new laptop, opened browser for first time
+browser checks its cache for IP of facebook.com
+browser contacts OS, for IP address of facebook.com
+OS checks its cache now, it is NA...
+
+ISP is responsible for the DNS resolution.
+
+OS is enabled to contact ISP DNS resolver
+
+DNS resolver checks its cache...
+
+Root servers --> 13 servers
+top MNC companies and country governments create a non profit organisation to manage these root servers
+Oxford --> new english words adding
+
+DNS resolver contacts nearest root servers...
+
+root server scans the domain you asked for
+facebook.com 
+
+TLD --> top level domains
+.com, .online, .org, .edu, .in, .uk, .us, .net, .io, .ai, .shop, etc
+.siva
+
+Root server informs DNS resolver to contact .com TLD. Root server provides .com TLD address details
+
+DNS resolver contacts .com TLD to provide IP address
+
+TLD checks its system to provide IP address of facebook.com
+
+Records
+---------------
+A record --> you have to update IP address to your domain     (db private ip ni hostinger A record lo update cheyyali)
+
+take the dbserver private ip > go to hostinger > domains > dns/nameservers 
+
+.siva. I should contact root servers that I started a TLD called .siva
+
+Domain registars are middle man. now I connect all major domain registars to show my domain TLD
+
+Domain registars inform TLD that some one bought facebook.siva domain
+
+Domain registars update nameservers for the domain from TLD....
+
+DNS resolver connects with TLD address... address is nothing but nameservers
+
+------------------------------------------------------------------------------------------
+
+Since db server lo em ledu kabatti display cheyyadaniki > frontend ip ni A record lo petti chudham > so that when we enter dns name nginx page will be displayed
+
+Ex : give frontend public ip to A record on hostinger 
+
+After that hit enter > now search with the dns name on browser
+
+Ex: jagathlearn.art
+---------------------------------------------------------------------------------------------------------
+dns : jagathlearn.art
+
+https://hpanel.hostinger.com/domain/jagathlearn.art/domain-overview
+
+nameservers
+
+ns1.dns-parking.com
+
+ns2.dns-parking.com
+
+Route 53
+---------
+you can book/manage/transfer domain names
+
+Here we are transferring Hostinger name servers vadhu  aws name servers kavali ani > so that it will be managed in aws server itself
+
+Click on hosted zones
+----------------------------
+Give the exact domain name you created and scroll down and click on create hosted zone. Why we are transferring because our server and infra was on aws so that we are transferring our dns to here.
+
+aws dns benefits:
+1)fast updates
+2)Automatic updates
+
+Now our name servers are created update the new ns on hostinger
+
+https://hpanel.hostinger.com/domain/jagathlearn.art/dns?tab=dns_records
+
+Select change nameservers option
+
+
+---------------------------------------------------------------------------------------------------
+
+
+mysql -h mysql.daws78s.online -uroot -pExpenseApp@1 < /app/schema/backend.sql
+
+
+proxy_http_version 1.1;
+
+location /api/ { proxy_pass http://backend.daws78s.online:8080/; }
+
+location /health {
+  stub_status on;
+  access_log off;
+}
+
+hdfcbank.com --> domain
+netbanking.hdfcbank.com --> Sub domain
+
+frontend.daws78s.online
+daws78s.online
+
+Proxy --> Someone on behalf of you
+
+Frontend proxy, reverse proxy
+
+1. Book the domain
+2. Understand what is A record
+3. Install nginx and you should see welcome page with your domain name
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                                                                    Session 9
+																					---------
+
+Domain create
+Domain transfer through R53 hosted zone
+Update NS in hostinger
+
+Browser --> Cache --> OS --> OS cache --> ISP DNS resolver --> Root servers --> TLD information --> TLD NS --> NS --> Records
+
+Domain registar --> TLD about update
+
+A --> IP address
+CNAME --> another domain redirect
+MX --> Mail servers
+NS --> Nameservers
+SOA --> Authorization
+TXT --> validation purpose.
+
+Forward proxy and reverse proxy
+--------------------------------
+1. You can watch restricted content
+2. You can change Geo location
+3. client side proxy, only client is aware of proxy
+4. Hiding client identity
+5. Traffic monitor
+6. Secure connections
+7. Content access restriction
+8. We can use it for cache purpose
+
+Reverse Proxy
+-------------------------
+1. Only Server is aware of proxy
+2. Security between clients and servers
+3. as load balancer..
+4. SSL termination
+
+nginx is also powerful reverse proxy server/ proper load balancer (aws alb was also backend was nginx)
+
+Load balancer :
+now practice for LB : create 3 instances and install nginx on all 3 servers
+
+server 1
+
+cd /usr/share/nginx/html
+
+rm -rf *
+
+vim index.html
+
+<h1> Hi I am server 1 </h1>
+
+cat index.html
+
+
+server 2
+
+cd /usr/share/nginx/html
+
+rm -rf *
+
+vim index.html
+
+<h1> Hi I am server 2 </h1>
+
+cat index.html
+
+----------------------------------------------
+front end :
+-------------
+
+/etc/nginx/nginx.conf --> default conf
+/usr/share/nginx/html
+/var/log/nginx
+
+include /etc/nginx/default.d/*.conf;  (means default alane vunchi additionall add cehyyamani)
+
+vim /etc/nginx/nginx.conf
+
+under http place below script
+
+upstream backend {
+      server 172.31.20.182; 
+      server 172.31.16.194;
+   }
+
+------------------------------------------------------------------
+
+go to cd /etc/nginx/default.d
+
+ls -ltr
+
+vim load-balance.conf
+   
+proxy_http_version 1.1;
+
+location / { proxy_pass http://backend/; }
+
+location /health {
+  stub_status on;
+  access_log off;
+}
+
+-------------------------------------------------------
+
+systemctl restart nginx
+
+if you use front end ip on webpage and refresh it > it shows server1 and sever2 for every refresh it will dispaly traffic equally.
+
+/usr/share/nginx/html --> default
+
+IP or IP/ display iyyedhi ee index file lo vunde data ne --> /usr/share/nginx/html/index.html
+
+Linux folder structure
+----------
+/ --> root directory of the OS
+/bin(binaries) --> essential commands are here. ls, cat, grep, etc.
+/sbin(system binaries) --> admin commands, reboot, iptables, etc.
+/boot --> when linux server started, it refers boot directory for system configuration
+/dev(devices) --> monitor/terminal, keyboard, printers, etc.
+/etc(extra configuration) --> system configuration files, service configurations, etc.
+/home(home directory of users) --> all users directory are here, their personal files, user related configs..
+/lib(Libraries) --> libraries/dependencies required by OS equal to .dll in windows
+/lib64(64 bit libs)
+/media(Media devices) --> CD, DVC, USB, etc.
+/mnt(mount) --> adding extra disks
+/opt(optional) --> if you want third party applications, custom applications you can keep here
+/proc(processor) --> /proc/cpuinfo /proc/meminfo
+/root (Root user) --> home directory of root user
+/run (Running information of server)
+/srv(service files) --> When you use your server to serve as file server, you can use this
+/swap(Swap space) --> 1GM ram, OS will use this swap space for extension of RAM. Reserver space
+/sys --> system kernal info, devices info, etc
+/tmp --> temporary directory, not at all important
+/usr --> shared files and docs between all users...
+/var(variables) --> logs and messages
+
+/etc
+/opt
+/var
+/bin
+
+Linux is completed 
+
+Configuration
+----------------------
+1. Install application runtime --> nodejs, java, etc.
+2. create a user
+3. create a folder
+4. download code
+5. install dependencies
+6. create systemctl services
+
+free -m --> check ram usage
+df -hT --> HD usage
+
+123456789
+
+keep all your commands in a file and run that file --> shell script
+
+What is shell?
+
+Shell is a interpreter in Linux, that checks and executes the users commands
+
+/bin/bash --> interprets every command issued inside linux server
+
+1. carry one by one to home
+2. use a truck, keep everything inside and carry to home
+
+if a command gives error, let us proceed or clear the error and proceed
+
+when you run through program, it should be able to check previous command is success, if success proceed, if failure stop and inform user(error handling)
+
+Algorithm while coding write on below things on paper
+-------------------------------------------------
+write steps in your own language what to do?
+
+Install a pacakge through shell script??
+
+check you have root access or not
+
+if no root access, show the error
+
+check if already installed or not, inform already installed
+
+if not installed, install it
+
+check success or not
+
+git --> store scripts or programs
+
+
+
+
+/ --> frontend website
+/hello --> hello website
+/app --> backend
+/app1 --> backend1
+
+m.facebook --> mobile servers
+facebook --> web servers
+
+daws81s.online
+daws81s.online/hello 																					
+
+
+
+
+

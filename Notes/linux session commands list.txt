@@ -1,0 +1,1004 @@
+
+
+To generate key
+
+ssh-keygen -f <file name> ( you can give any name as file name)
+
+Ex :  ssh-keygen -f linux-key
+-------------------------------------------------------------------------------------------------------------------------------
+
+Login into putty
+
+ssh -i <private-key path> ec2-user@ip address 
+
+$ ssh -i linux-key.pem ec2-user@54.152.63.143
+
+/home/<user-name> == Landing page for any person this will be starting path if he logged to a server
+
+Ex: /home/ec2-user
+---------------------------------------------------------------------------------------------------------------------------------
+$ - dollar means normal user
+
+command - normal syntax == command name <options> <inputs>
+
+-<single-char> (single hyphen - vunte charcter vuntadi ex: ls -a, rm -r, grep -i)
+
+--<word>  ( double hyphen -- vunte word vuntadi ex: --help)
+
+Clear --> clears the screen
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+ifconfig (interface configuration) is a command-line tool in Linux and Unix-like systems used to display, configure, and manage network interface parameters, 
+such as IP addresses, subnet masks, and hardware (MAC) addresses. It is essential for checking network status, bringing interfaces up/down, or changing IP
+
+----------------------------------------------------------------------------------------------------------------------------------
+echo
+
+to print on linux we use echo command
+
+echo "hello world" or echo hello world
+
+output: hello world
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+cd --> Change directory ex : cd / --> / means root directory
+
+cd enter --> home directory
+
+cd .. --> one step back
+
+absolute path or relative path
+
+cd .. --> relative path
+cd /home/ec2-user --> absolute path 
+
+----------------------------------------------------------------------------------------------------------------------------------
+ls --> list sub directories
+
+ls -l --> -l means lengthy format
+
+ls -lr --> -lr reverse alphabitical order
+
+ls -lt --> -lt display time from latest on top to old on bottom format
+
+ls -ltr or ls -lrt--> -ltr displays time in reverse old on top and latest on bottom format
+
+ls -la --> -la -a means all(hidden files start with .)
+
+ls --help --> --h means help
+-----------------------------------------------------------------------------------------------------------------------------------
+touch --> create a file
+
+syntax : touch filename --> touch crazy.txt
+
+mkdir --> create folder or directory (make directory)
+
+syntax : mkdir happy
+
+d-- d for directory
+
+--  - for file
+
+cat > filename --> adding the text
+
+cat > crazy.txt --> it helps to enter something on file crazy.txt --> after enetering control + D
+
+cat filename --> reading the text
+
+cat >> filename --> add text without overriding previous text. (>> means append)
+------------------------------------------------------------------------------------------------------------------------------------
+rm filename --> remove the file ex: rm lazy
+
+rmdir --> remove directory ex: rmdir happy ( removes only empty directory)
+
+rm -r --> deletes folder and its inside contents  ex: rm -r happy (-r means recursive)
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+mv <old -filename> <new-filename> (it changes fie name with new file name)
+
+ex : mv ravi raju (so ravi file name changes to raju)
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+uname --> me system okka name
+
+[ec2-user@ip-172-31-26-223 ~]$ uname
+Linux
+
+uname -a --> overall info
+
+[ec2-user@ip-172-31-26-223 ~]$ uname -a
+Linux ip-172-31-26-223.ec2.internal 6.1.159-182.297.amzn2023.x86_64 #1 SMP PREEMPT_DYNAMIC Mon Jan 12 11:34:58 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Copy command
+
+cp <source file> <destination file>
+
+ex : cp /etc/passwd data 
+
+Note:normal ga users information motham /etc/passwd path lo vuntundi
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+grep command
+
+if you want to find a particular word in a file
+
+grep <word-to-find> <file-name> ( so that it will highlight that word where ever it was on the file)
+
+grep sbin passwd
+
+Since linux is case sensitive you search with grep -i (so it will work as case insensitive aswell)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+How to download the files?
+
+we have two commands curl and wget
+
+wget --> it means webget you need url for that
+
+ex:
+
+[ec2-user@ip-172-31-26-223 ~]$ wget https://raw.githubusercontent.com/daws-81s/notes/refs/heads/main/session-03.txt
+--2026-01-28 18:35:56--  https://raw.githubusercontent.com/daws-81s/notes/refs/heads/main/session-03.txt
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.109.133, 185.199.111.133, 185.199.110.133, ...
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.109.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 3059 (3.0K) [text/plain]
+Saving to: ‘session-03.txt’
+
+session-03.txt                                       100%[====================================================================================================================>]   2.99K  --.-KB/s    in 0s
+
+2026-01-28 18:35:56 (67.8 MB/s) - ‘session-03.txt’ saved [3059/3059]
+
+[ec2-user@ip-172-31-26-223 ~]$ ls -ltr
+total 8
+-rw-r--r--. 1 ec2-user ec2-user 1519 Jan 28 18:21 users
+-rw-r--r--. 1 ec2-user ec2-user 3059 Jan 28 18:35 session-03.txt
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+Curl --> It will show the text directly on the terminal without downlading it. so it will display text without downloading
+
+ex: curl https://raw.githubusercontent.com/daws-81s/notes/refs/heads/main/session-03.txt
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+pipe command : By using pipe you give output of one command as input to other
+
+ | --> it is called pipe
+ 
+ ex : echo hello world | echo $?
+ 
+------------------------------------------------------------------------------------------------------------------------
+ 
+cut command : -d --> delimiter
+
+cut -d "/" -f1
+
+ex ; echo  https://raw.githubusercontent.com/daws-81s/notes/refs/heads/main/session-03.txt | cut -d "/" -f1
+
+output --> https:
+
+Note : for example you have list of users on /etc/passwd or passwd now they are asking to print all the users from the file. You can use below command
+
+how to get list of users in linux server ?
+
+cut -d ":" -f1 passwd
+
+[ec2-user@ip-172-31-26-223 ~]$ cut -d ":" -f1 passwd
+root
+bin
+daemon
+adm
+lp
+sync
+shutdown
+halt
+mail
+operator
+games
+ftp
+nobody
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+awk command:
+
+it was powerful command compared to cut because for cut you need count each fragment to know the file name. But
+
+awk is not like that you no need to count.
+
+awk -F "/" '{print $1F}'
+
+here F = fragment
+ and if you want to know the last fragment you can use $NF
+ 
+ awk -F "/" '{print $NF}'
+
+echo https://raw.githubusercontent.com/daws-81s/notes/refs/heads/main/session-03.txt | awk -F "/" '{print $NF}'
+output:
+session-03.txt
+
+Note : for example you have list of users on /etc/passwd or passwd now they are asking to print all the users from the file. You can use below command
+
+how to get list of users in linux server ?
+
+ awk -F ":" '{print $1F}' passwd
+ 
+root
+bin
+daemon
+adm
+lp
+sync
+shutdown
+halt
+mail
+operator
+games
+ftp
+nobody
+
+awk -F ":" '{print $1F ,$3F}' passwd ( you will get both user and userID)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+word count command
+
+wc -l <file-name>
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+head command
+
+head <file-name> --> first 10 lines
+
+head -n 2 filename ( if you want some count of lines)
+
+ex: 
+
+[ec2-user@ip-172-31-70-187 ~]$ head -n 2 passwd
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+
+
+tail command
+
+tail <file-name> --> last 10 lines
+
+tail -n 5 filename ( if you want some count of lines)
+
+ex:
+[ec2-user@ip-172-31-70-187 ~]$ tail -n 5 passwd
+ec2-instance-connect:x:993:993::/home/ec2-instance-connect:/sbin/nologin
+stapunpriv:x:159:159:systemtap unprivileged user:/var/lib/stapunpriv:/sbin/nologin
+rpcuser:x:29:29:RPC Service User:/var/lib/nfs:/sbin/nologin
+tcpdump:x:72:72::/:/sbin/nologin
+ec2-user:x:1000:1000:EC2 Default User:/home/ec2-user:/bin/bash
+
+
+*if you want a particular lines to be visible like something on middle from a 28 lines file ?
+
+ex : out of 28 lines i want 11 -18 lines then use below command
+
+cat passwd | head -n 18| tail -n 8
+
+** if you want to see running logs of a log file then use or how to see running logs?
+
+tail -f <log-file name>
+
+logs normally located on /var/log/messages
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Editor or edit a file
+
+Vim --> visually improved
+
+vim<file-name>
+
+colon mode or command mode
+----------------------------
+:q --> quit
+:wq --> write & quit
+:q! --> don't save the changes & quit
+:set nu --> It will display line numbers (nu - number)
+:set nonu --> It will remove numbers listed (nonu - no number)
+:/ <word-to-find> --> to search a particular word from top
+:? <word-to-find> --> to search a particular word from bottom
+n --> next
+:noh --> no highlight (don't highlight anythind)(noh - no highlight)
+:%d --> delete everything
+:d --> delete
+:2d --> delete 2nd line
+:s/which word/enter the new word you wanted (note: it only changes the line where our cursor is and only first occurance word will change)
+example = :s/sbin/SBIN  (here s means substitute)
+:s/which word/enter the new word you wanted/g (here /g means global.The line which cursor is placed every word will be changed)
+example = :s/sbin/SBIN/g
+:3s/which word/enter the new word you wanted/g (particular line all occurances)
+example =:3s/sbin/SBIN/g
+:%/which word/what do you want/g (all occurances on that file will be changed)
+
+Esc Mode
+---------
+u --> undo
+shift + g --> cursor goes to bottom
+gg --> goes to top
+yy --> copy
+p --> paste
+10p -->paste 10 times
+dd --> delete the line
+
+Insert mode
+------------
+Just inserting
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+File Permissions
+----------------
+
+Read - 4
+write - 2
+execute - 1
+total 7
+
+ex :  -rw-r--r--
+
+ (-) denotes it is file (if its starts with drw- --> then its a directory)
+
+1)-rw- > who is the onwer of the file also called as user has read and write permission == (u)
+2)r-- > which group he belongs to has only read permission == (g)
+3)r-- > others has only read permission ==(o)
+
+*Who can change permissions? either owner/root user/ admin
+
+*command to change permission chmod
+
+chmod o+w filename (giving others write permission) (002)
+chmod o+x filename (giving others execute permission)(001) 
+chmod o-rwx filename (removing rwx permission to others) (000)
+chmod ugo+rwx filename (adding all permissions to all users, group, others) (777)
+
+* if you don't assign any group to user. His group is also same as his username 
+( ex: -rw-r--r--. 1 ec2-user ec2-user 1519 Jan 30 06:43 passwd - Here ec2-user didnt tagged to anygroup so his username and group name is same i.e ec2-user)
+
+777 - means all access to everyone -rwxrwxrwx
+750 - means user has all access, group has read and execute access and 0 access for others  -rwxr-x---
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                                        Adminstration
+													--------------------
+sudo su --> (super user access)(it will switch to root user)
+
+ex:
+[ec2-user@ip-172-31-29-56 ~]$ sudo su
+[root@ip-172-31-29-56 ec2-user]#
+
+[root@ip-172-31-29-56 ec2-user]# pwd
+/home/ec2-user
+
+sudo su - >> it will switch to /root user
+
+ex:
+[ec2-user@ip-172-31-29-56 ~]$ sudo su -
+Last login: Sat Jan 31 14:37:16 UTC 2026 on pts/1
+
+[root@ip-172-31-29-56 ~]# pwd
+/root
+[root@ip-172-31-29-56 ~]#
+
+For exit root user use cntrl + d
+
+ex:
+[root@ip-172-31-29-56 ~]#  (# is important for adminstration)
+logout
+[ec2-user@ip-172-31-29-56 ~]$ pwd
+/home/ec2-user
+[ec2-user@ip-172-31-29-56 ~]$
+
+user management
+--------------
+create user :
+----------
+syntax : useradd <user-name> 
+ex : 
+sudo su -
+[root@ip-172-31-29-56 ~]# useradd ramesh
+
+
+id --> gives all info about current user
+
+ex : 
+[ec2-user@ip-172-31-29-56 ~]$ id
+uid=1000(ec2-user) gid=1000(ec2-user) groups=1000(ec2-user),4(adm),10(wheel),190(systemd-journal) 
+
+id ramesh --> displays ramesh imformation
+
+ex : 
+[root@ip-172-31-29-56 ~]# id ramesh
+uid=1001(ramesh) gid=1001(ramesh) groups=1001(ramesh)
+
+When you create a user, by default a group will be created on the same username 
+
+*user info will be on /etc/passwd ( it contains all the user info)
+
+Ex:
+[root@ip-172-31-29-56 ~]# cat /etc/passwd
+tcpdump:x:72:72::/:/sbin/nologin
+ec2-user:x:1000:1000:EC2 Default User:/home/ec2-user:/bin/bash
+ramesh:x:1001:1001::/home/ramesh:/bin/bash
+
+-->ramesh was added to that folder
+
+*Group info will be on /etc/group (it contains all group information)
+
+Ex:
+[root@ip-172-31-29-56 ~]# cat /etc/group
+screen:x:84:
+ec2-user:x:1000:
+ramesh:x:1001:
+
+[root@ip-172-31-29-56 ~]# grep ramesh /etc/group
+ramesh:x:1001:
+[root@ip-172-31-29-56 ~]# grep ramesh /etc/passwd
+ramesh:x:1001:1001::/home/ramesh:/bin/bash
+
+Creating password for user-name
+--------------------------------
+passwd <user-name>
+
+passwd ramesh --> set up the password for ramesh)
+
+[root@ip-172-31-29-56 ~]# passwd ramesh
+Changing password for user ramesh.
+New password:
+Retype new password:
+passwd: all authentication tokens updated successfully.
+
+Ex : 12345
+
+create a group
+----------------
+
+create devops group and add ramesh to it
+
+groupadd <group-name>
+
+ex: 
+groupadd devops
+[root@ip-172-31-29-56 ~]# grep devops /etc/group
+devops:x:1002:
+
+to check group was there or not
+---------------------------------
+
+getent group <group-name> --> getent group devops
+
+every user has atleast one primary group (gid) and multiple secondary groups (groups)
+
+[root@ip-172-31-29-56 ~]# id ramesh
+uid=1001(ramesh) gid=1001(ramesh) groups=1001(ramesh)
+
+adding group to User
+------------
+usermod -g <groupname> <user-name> (here usermod --> user modification, -g --> group)
+
+ex : usermod -g devops ramesh --> adding ramesh to devops
+
+[root@ip-172-31-29-56 ~]# usermod -g devops ramesh
+[root@ip-172-31-29-56 ~]# id ramesh
+uid=1001(ramesh) gid=1002(devops) groups=1002(devops)
+
+ramesh primary -->devops
+ramesh secondary --> testing
+
+adding secondary group:
+-----------------------
+usermod -aG testing ramesh (adding secondary group to ramesh) (here -a means append or add)
+
+[root@ip-172-31-29-56 ~]# usermod -aG testing ramesh
+[root@ip-172-31-29-56 ~]# id ramesh
+uid=1001(ramesh) gid=1002(devops) groups=1002(devops),1003(testing)
+
+remove ramesh from group
+------------------------
+gpasswd -d ramesh testing --> delete ramesh from testing group
+
+ex:
+[root@ip-172-31-29-56 ~]# gpasswd -d ramesh testing
+Removing user ramesh from group testing
+[root@ip-172-31-29-56 ~]# id ramesh
+uid=1001(ramesh) gid=1002(devops) groups=1002(devops)
+
+
+if employee leaves the organization
+------------------------------------
+1. remove him from the groups
+2. then delete the user
+
+condition : the user must have one primary and one secondary group. So if you want to remove him use his own name as a group
+
+usermod -g ramesh ramesh
+
+user delete:
+------------
+userdel ramesh (ramesh user and ramesh group both will be deleted)
+ex:
+[root@ip-172-31-29-56 ~]# usermod -g ramesh ramesh
+[root@ip-172-31-29-56 ~]# id ramesh
+uid=1001(ramesh) gid=1001(ramesh) groups=1001(ramesh)
+[root@ip-172-31-29-56 ~]# userdel ramesh
+
+group delete:
+-------------
+groupdel <group-namme> --> to delete particular group
+
+ex:
+[root@ip-172-31-29-56 ~]# grep suresh /etc/group
+suresh:x:1004:
+[root@ip-172-31-29-56 ~]# groupdel suresh
+[root@ip-172-31-29-56 ~]# grep suresh /etc/group
+
+Login to putty via created user
+-------------------------------
+
+add user (useradd suresh)
+add password (passwd suresh) ex: suresh123 
+ask user to login via username and password
+
+$ ssh -i linux-key.pem suresh@54.221.1.140
+suresh@54.221.1.140: Permission denied (publickey,gssapi-keyex,gssapi-with-mic)
+
+by default, linux os will not allow password authentication, it will only allow key based authentication.
+
+> so you need to change permission the ssh login file 
+
+vim /etc/ssh/sshd_config
+
+set passwordauthentication yes (by default it will be no)
+
+# Explicitly disable PasswordAuthentication. By presetting it, we
+# avoid the cloud-init set_passwords module modifying sshd_config and
+# restarting sshd in the default instance launch configuration.
+PasswordAuthentication yes
+PermitEmptyPasswords no
+
+*then restart (after doing config changes you need to restart)
+
+command :
+-------
+systemctl restart sshd
+
+post config changes and restart login was successful
+$ ssh -i linux-key.pem suresh@54.221.1.140
+suresh@54.221.1.140's password:
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+[suresh@ip-172-31-29-56 ~]$ 
+
+
+set up SSH public key authentication to connect to a remote system
+-------------------------------------------------------------------
+
+[root@ip-172-31-18-200 ~]# useradd suresh
+[root@ip-172-31-18-200 ~]# passwd suresh
+
+First go to home location  --> cd
+
+[ec2-user@ip-172-31-18-200 ~]$ ls -la
+
+ls -la >> cd .ssh >> ls -l >> cat authorized_keys
+
+ex: 
+[ec2-user@ip-172-31-18-200 ~]$ cd .ssh/
+[ec2-user@ip-172-31-18-200 .ssh]$ ls -ltr
+total 4
+-rw-------. 1 ec2-user ec2-user 90 Feb  1 11:28 authorized_keys
+[ec2-user@ip-172-31-18-200 .ssh]$ cat authorized_keys
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM7icIKO0ocwBnRwtFHcH8FkSRnUmiGJotWxeH3FaTwX daws2026
+
+Linux admins will ask suresh public key.. suresh generates key pair and send public key to linux admin
+
+from adminuser : 
+
+cd /home/suresh
+
+create directory mkdir.ssh --> touch authorized_keys --> vim authorized_keys (place suresh public_keys)
+
+
+create keygen on local path /j/devops/daws-81s  >> ssh-keygen -f suresh >> cat suresh.pub
+
+now place the public key on main server cd /home/suresh >> cd .ssh >> vim authorized_keys >> paste the public key
+
+give 400 permission to authorized_keys >> read access only, even suresh should not have write access and ownership must be suresh
+
+[root@ip-172-31-18-200 .ssh]# chmod 400 authorized_keys
+[root@ip-172-31-18-200 .ssh]# ls -ltr
+total 4
+-r--------. 1 root root 93 Feb  1 13:52 authorized_keys
+
+Ownership
+----------------
+chown --> change ownership
+
+chown -R suresh:suresh .ssh ( it will recursively give same ownership to directory aswell as inside files)
+
+[root@ip-172-31-18-200 suresh]# chown -R suresh:suresh .ssh
+[root@ip-172-31-18-200 suresh]# chmod 700 .ssh  ( for keys user must only have read and write and execute access)
+[root@ip-172-31-18-200 suresh]# ls -ltr
+total 0
+[root@ip-172-31-18-200 suresh]# ls -la
+total 16
+drwx------. 3 suresh suresh  95 Feb  1 13:50 .
+drwxr-xr-x. 4 root   root    36 Feb  1 13:12 ..
+-rw-------. 1 suresh suresh 107 Feb  1 13:50 .bash_history
+-rw-r--r--. 1 suresh suresh  18 Jan 28  2023 .bash_logout
+-rw-r--r--. 1 suresh suresh 141 Jan 28  2023 .bash_profile
+-rw-r--r--. 1 suresh suresh 492 Jan 28  2023 .bashrc
+drw-------. 2 suresh suresh  29 Feb  1 13:52 .ssh
+
+final step change set passwordauthentication no
+
+vim /etc/ssh/sshd_config
+
+passwordauthentication no
+
+[root@ip-172-31-18-200 ~]# vim /etc/ssh/sshd_config
+[root@ip-172-31-18-200 ~]# systemctl restart sshd
+
+ssh -v -i suresh suresh@ip (to view logs while command executes) (note dir .ssh on /home/suresh must have 700 access (rwx))
+
+Asus@Jagath MINGW64 /j/devops/daws-81s
+$ ssh -i suresh suresh@54.198.105.90
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+Last login: Sun Feb  1 13:41:17 2026 from 106.222.232.40
+
+so manam private key, suresh ani login ki ichina appudu linux velli /home/suresh authorized_keys ni private key tho match chestundi
+if all good it will login note : 700 .ssh and 400 permission for authorized_keys
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                                Package management
+												------------------
+A software have lot of dependencies on other softwares
+
+In Previous days there was rpm--> redhat package manager
+
+identify the dependencies, install the dependencies and finally install the packages you want.
+
+yum
+----
+Later we got yum 
+
+dnf
+----
+after that dnf was introduced (dnf was latest or advanced one)	
+
+you can use either yum or dnf 
+
+
+In linux urls are configured on /etc/yum.repos.d 
+
+so whenever you request linux to install something it will fetch those URL's details from this path /etc/yum.repos.d and download them 	
+
+[ec2-user@ip-172-31-18-200 ~]$ sudo su -
+Last login: Sun Feb  1 15:13:22 UTC 2026 on pts/1
+[root@ip-172-31-18-200 ~]# cd /etc/yum.repos.d/
+[root@ip-172-31-18-200 yum.repos.d]# ls -ltr
+total 8
+-rw-r--r--. 1 root root  729 Jan 13 21:38 kernel-livepatch.repo
+-rw-r--r--. 1 root root 1028 Jan 13 21:38 amazonlinux.repo
+
+[root@ip-172-31-18-200 yum.repos.d]# cat amazonlinux.repo
+[amazonlinux]
+name=Amazon Linux 2023 repository
+mirrorlist=https://al2023-repos-$awsregion-de612dc2.s3$dualstack.$awsregion.$awsdomain/core/mirrors/$releasever/$basearch/$mirrorlist
+priority=10
+enabled=1
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-amazon-linux-2023
+report_instanceid=1
+
+install command:
+----------------
+dnf install	<application-name>
+
+ex: dnf install git		(in between it will ask for yes or no click y) ( use dnf install git -y if you dont want any interruption)
+
+
+Installed:
+  git-2.50.1-1.amzn2023.0.1.x86_64                      git-core-2.50.1-1.amzn2023.0.1.x86_64           git-core-doc-2.50.1-1.amzn2023.0.1.noarch             perl-Error-1:0.17029-5.amzn2023.0.2.noarch
+  perl-File-Find-1.37-477.amzn2023.0.7.noarch           perl-Git-2.50.1-1.amzn2023.0.1.noarch           perl-TermReadKey-2.38-9.amzn2023.0.2.x86_64           perl-lib-0.65-477.amzn2023.0.7.x86_64
+
+Complete!
+
+If you want to see the list of packages which were installed
+------------------------------------------------
+
+dnf list installed
+
+
+if you want to just count the installed packages
+------------------------------
+
+dnf list installed|wc -l
+
+ex: [root@ip-172-31-77-30 ~]# dnf list installed|wc -l
+484
+
+If you want list of packages aavailable to install
+-------------------------------------------
+dnf list available
+
+total count of available packages
+
+[root@ip-172-31-77-30 ~]# dnf list available|wc -l
+13583
+
+To unistall or rtemove application installed
+--------------------------------------------
+
+dnf remove git -y
+
+
+How can you check cpu info, memory info, os ?
+------------------------------------------------
+
+cat /proc/cpuinfo (proc means processor)
+
+cat /proc/meminfo (ram memory info)
+
+cat /etc/os-release (os info) 
+
+-------------------------------------------------------------------------------------------------------------
+
+service management:
+-------------------
+
+systemctl status (ctl means control)
+systemctl start
+systemctl stop
+systemctl restart 
+systemctl enable
+systemctl diable
+
+ex: systemctl sshd
+
+http port no = 80
+
+we use nginx package for http
+
+we use apache aswell but it was old. So during this course we use ngnix
+
+Nginx --> install the package -->start the service 
+
+dnf install nginx -y
+
+[root@ip-172-31-77-30 ~]# systemctl start nginx
+
+[root@ip-172-31-77-30 ~]# systemctl status nginx
+
+● nginx.service - The nginx HTTP and reverse proxy server
+     Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; preset: disabled)
+     Active: active (running) since Tue 2026-02-03 17:36:08 UTC; 16s ago
+
+Before searching with url. edit inbound rules --> security groups on allow-ssh --> add new rule--> allow http 80
+
+Now it will also work if you use http://98.82.141.36:80
+
+
+If you stop nginx url wont work. Nginx was used to host web servers
+
+systemctl stop nginx --> you need to start nginx --> to make website running
+
+systemctl enable/disable
+
+by default enabled services will start automatically
+
+systemctl enable nginx
+
+If you dont want automatic restart 
+
+systemctl disable nginx
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Process management :
+------------------
+
+A sequence of steps to be executed to complete a task.
+
+In linux every task you give. It will create a process and completes it. Once completes it will deletes the process.
+
+Ex: ngix if it was running. There should be process ID (PID)
+
+command to check process
+------------------------
+
+ps
+
+ex: 
+[root@ip-172-31-19-0 ~]# ps
+    PID TTY          TIME CMD
+   5139 pts/1    00:00:00 sudo
+   5140 pts/1    00:00:00 su
+   5141 pts/1    00:00:00 bash
+   5163 pts/1    00:00:00 ps
+
+
+How to list all the process running inside your linux server?
+---------------------------------------------------
+
+ps -ef
+
+
+ex :
+[root@ip-172-31-19-0 ~]# ps -ef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 12:44 ?        00:00:01 /usr/lib/systemd/systemd --switched-root --system --deserialize=32
+root           2       0  0 12:44 ?        00:00:00 [kthreadd]
+root           3       2  0 12:44 ?        00:00:00 [rcu_gp]
+root           4       2  0 12:44 ?        00:00:00 [rcu_par_gp]
+root           5       2  0 12:44 ?        00:00:00 [slub_flushwq]
+root           6       2  0 12:44 ?        00:00:00 [netns]
+root           8       2  0 12:44 ?        00:00:00 [kworker/0:0H-events_highpri]
+root          10       2  0 12:44 ?        00:00:00 [mm_percpu_wq]
+root          11       2  0 12:44 ?        00:00:00 [rcu_tasks_kthread]
+root          12       2  0 12:44 ?        00:00:00 [rcu_tasks_rude_kthread]
+root          13       2  0 12:44 ?        00:00:00 [rcu_tasks_trace_kthread]
+root          14       2  0 12:44 ?        00:00:00 [ksoftirqd/0]
+root          15       2  0 12:44 ?        00:00:00 [rcu_preempt]
+root          16       2  0 12:44 ?        00:00:00 [migration/0]
+root        5216    5141  0 14:53 pts/1    00:00:00 ps -ef  (here even for the command we run it created proces ID for tracking purpose)
+
+
+here PID --> process ID
+     PPID --> parent process ID
+
+ps -ef|grep nginx ( to check particular process)
+
+
+Foreground and background process:
+-----------------------------------
+
+Foreground -->Runs in foreground, Blocks the screen while running
+background --> runs in background, you can do other works
+
+How can you run a process in background?
+
+give & after command.
+
+ex: sleep 10 (it will run for 10 seconds but blocks the screen since it was foreground process)
+
+sleep 100 & (Now it will run for 100 seconds in background without blocking the screen)
+
+ex:
+
+[root@ip-172-31-19-0 ~]# sleep 10
+
+[root@ip-172-31-19-0 ~]# sleep 10 &
+[1] 5531
+[root@ip-172-31-19-0 ~]# ps -ef|grep sleep
+root        5531    5141  0 15:05 pts/1    00:00:00 sleep 10
+root        5582    5141  0 15:05 pts/1    00:00:00 grep --color=auto sleep
+[root@ip-172-31-19-0 ~]#
+
+
+How much cpu and memory was used by each process can be seen by using top command.
+---------------------------------------------------------------------------------'
+top
+
+ex: control + c (to exit)
+
+top - 15:07:51 up  2:23,  2 users,  load average: 0.05, 0.01, 0.00
+Tasks: 102 total,   1 running, 101 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.2 sy,  0.0 ni, 99.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :    916.8 total,    518.7 free,    175.5 used,    222.7 buff/cache
+MiB Swap:      0.0 total,      0.0 free,      0.0 used.    610.3 avail Mem
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   5583 root      20   0  224056   3304   2712 R   0.3   0.4   0:00.03 top
+      1 root      20   0  172356  17296  10772 S   0.0   1.8   0:01.36 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd
+      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par_gp
+      5 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 slub_flushwq
+
+
+If  particular process got struck means or you want to stop particular process which was running. We need to kill that.
+
+kill  --> request 
+
+kill -9 --> order, it means force kill
+
+ex : 
+[root@ip-172-31-19-0 ~]# sleep 100 &
+[1] 5531
+[root@ip-172-31-19-0 ~]# ps -ef|grep sleep
+root        5531    5141  0 15:05 pts/1    00:00:00 sleep 100
+root        5582    5141  0 15:05 pts/1    00:00:00 grep --color=auto sleep
+
+ex: kill 5531
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Network management: (on premisis servers)
+-------------------
+
+ports checking:
+
+netstat --> network statistics
+
+netstat -l --> for organised results
+
+netstat -lt --> for internet based results, here t means tcp -- transfer control protocol
+
+netstat -ltp --> use -ltp for process ID details aswell
+
+[root@ip-172-31-19-0 ~]# netstat -ltp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:ssh             0.0.0.0:*               LISTEN      1545/sshd: /usr/sbi
+tcp6       0      0 [::]:ssh                [::]:*                  LISTEN      1545/sshd: /usr/sbi
+
+
+netstat -ltpn or netstat -lntp (it will tell you what ports are open
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+      *************************this concludes the commands for linux sessions next is expense project****************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
