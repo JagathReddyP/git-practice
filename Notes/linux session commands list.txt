@@ -91,6 +91,8 @@ cat > crazy.txt --> it helps to enter something on file crazy.txt --> after enet
 
 cat filename --> reading the text
 
+tac filename --> reading text in reverse order 
+
 cat >> filename --> add text without overriding previous text. (>> means append)
 ------------------------------------------------------------------------------------------------------------------------------------
 rm filename --> remove the file ex: rm lazy
