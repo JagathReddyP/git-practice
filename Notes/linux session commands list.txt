@@ -68,6 +68,10 @@ ls -ltr or ls -lrt--> -ltr displays time in reverse old on top and latest on bot
 ls -la --> -la -a means all(hidden files start with .)
 
 ls --help --> --h means help
+
+df -hT --> entire hardisk memory chupistundi 
+
+du -h --> Particlar ga oka file or directory memory chudali ante
 -----------------------------------------------------------------------------------------------------------------------------------
 touch --> create a file
 
